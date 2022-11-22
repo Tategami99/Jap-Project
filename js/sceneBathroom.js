@@ -1,19 +1,19 @@
-class SceneInterior extends Phaser.Scene{
+class SceneBathroom extends Phaser.Scene{
     constructor(){
-        super('SceneInterior');
+        super('SceneBathroom')
     }
     preload(){
         //player
         this.load.spritesheet('player', 'images/RedHairHighSchooler.png', {frameWidth: 32, frameHeight: 32});
 
         //tilesets
-        this.load.image('tiles5', 'images/tilesets/Interiors_free_32x32.png');
-        this.load.image('tiles6', 'images/tilesets/japaneseInterior.png');
-        this.load.image('tiles7', 'images/tilesets/kotatsu.png');
-        this.load.image('tiles8', 'images/tilesets/Room_Builder_free_32x32.png');
+        this.load.image('tiles9', 'images/tilesets/Interiors_free_32x32.png');
+        this.load.image('tiles10', 'images/tilesets/bathroom.png');
+        this.load.image('tiles11', 'images/tilesets/mv_bathroom_addon_by_schwarzenacht-dapf6hr-removebg-preview.png');
+        this.load.image('tiles12', 'images/tilesets/Room_Builder_free_32x32.png');
 
         //tilemap
-        this.load.tilemapTiledJSON('map2', 'images/tilemaps/JapInterior1.json');
+        this.load.tilemapTiledJSON('map3', 'images/tilemaps/JapBathroom.json');
     }
     create(){
         //important variables
@@ -25,29 +25,28 @@ class SceneInterior extends Phaser.Scene{
         const tileMapHeight = 416;
 
         //tilemap and tilesets
-        const map = this.make.tilemap({key: 'map2'});
-        const tileset1 = map.addTilesetImage('interior32', 'tiles5');
-        const tileset2 = map.addTilesetImage('japaneseInterior', 'tiles6');
-        const tileset3 = map.addTilesetImage('Kotatsu', 'tiles7');
-        const tileset4 = map.addTilesetImage('room32', 'tiles8');
-        const floorLayer = map.createLayer('Floor', [tileset2, tileset4], 0, 0);
-        const wallsLayer = map.createLayer('Walls', tileset4, 0, 0);
-        const borderLayer = map.createLayer('Border', tileset4, 0, 0);
-        const nonCollisionLayer = map.createLayer('NonCollisionDetails', [tileset1, tileset2], 0, 0);
-        const collisionLayer = map.createLayer('CollisionDetails', [tileset1, tileset2, tileset3], 0, 0);
-        wallsLayer.setCollisionByExclusion(-1, true);
+        const map = this.make.tilemap({key: 'map3'});
+        const tileset1 = map.addTilesetImage('interiorPack', 'tiles9');
+        const tileset2 = map.addTilesetImage('bathroomPack', 'tiles10');
+        const tileset3 = map.addTilesetImage('bathroomPack1', 'tiles11');
+        const tileset4 = map.addTilesetImage('roomPack', 'tiles12');
+        const floorLayer = map.createLayer('floor', tileset4, 0, 0);
+        const wallLayer = map.createLayer('wall', tileset4, 0, 0);
+        const borderLayer = map.createLayer('border', tileset4, 0, 0);
+        const collisionLayer = map.createLayer('collisions', [tileset1, tileset2, tileset3], 0, 0);
+        wallLayer.setCollisionByExclusion(-1, true);
         borderLayer.setCollisionByExclusion(-1, true);
         collisionLayer.setCollisionByExclusion(-1, true);
 
         //player stuff
-        this.player = this.physics.add.sprite(0.47 * gameWidth, 0.7 *gameHeight, 'player');
+        this.player = this.physics.add.sprite(0.2 * gameWidth, 0.68 *gameHeight, 'player');
         this.player.setScale(scaleRatio, scaleRatio);
         this.createPlayer(this.player, gameWidth, gameHeight);
         this.physics.add.existing(this.player, true);
         this.player.body.allowGravity = false;
         this.player.setSize(this.player.width, 0.5*this.player.height);
         this.player.setOffset(0, 0.5*this.player.height);
-        this.physics.add.collider(this.player, [wallsLayer, borderLayer, collisionLayer]);
+        this.physics.add.collider(this.player, [wallLayer, borderLayer, collisionLayer]);
         this.player.setCollideWorldBounds(true);
         this.keyboard = this.input.keyboard.addKeys('W, A, S, D');
         this.direction = null;
@@ -146,4 +145,5 @@ class SceneInterior extends Phaser.Scene{
             }
         }
     }
+
 }

@@ -20,7 +20,7 @@ class SceneMain extends Phaser.Scene{
         console.log("Ready!");
 
         //important variables
-        const scaleRatio = 0.6;
+        const scaleRatio = 0.55;
         const gameWidth = this.game.config.width;
         const gameHeight = this.game.config.height;
         const tileScale = 1;
@@ -52,7 +52,10 @@ class SceneMain extends Phaser.Scene{
         this.createPlayer(this.player, gameWidth, gameHeight);
         this.physics.add.existing(this.player, true);
         this.player.body.allowGravity = false;
+        this.player.setSize(this.player.width, 0.5*this.player.height);
+        this.player.setOffset(0, 0.5*this.player.height);
         this.physics.add.collider(this.player, collisionLayer);
+        this.player.setCollideWorldBounds(true);
         this.keyboard = this.input.keyboard.addKeys('W, A, S, D');
         this.direction = null;
     }
@@ -155,17 +158,21 @@ class SceneMain extends Phaser.Scene{
     createButtons(){
         this.description = this.add.text(200, 390, 'N/A', {fill: 'black'});
         this.description.setVisible(false);
-        const interiorButton = this.add.text(278, 230, 'Enter', {fill: '#0f0'});
+        const interiorButton = this.add.text(283, 230, '入口', {fill: 'white'});
         interiorButton.setInteractive();
         interiorButton.on('pointerdown', () => {this.scene.start('SceneInterior')});
 
-        const sakuraButton = this.add.text(25, 220, '桜', {fill: '#0f0'});
+        const bathroomButton = this.add.text(460, 210, 'お手洗い', {fill: 'white'});
+        bathroomButton.setInteractive();
+        bathroomButton.on('pointerdown', () => {this.scene.start('SceneBathroom')});
+
+        const sakuraButton = this.add.text(25, 220, '桜', {fill: 'white'});
         sakuraButton.setInteractive();
         sakuraButton.on('pointerdown', () => {this.interactMessage('二本桜があります。')});
 
-        const pondButton = this.add.text(510, 330, '鯉', {fill: '#0f0'});
+        const pondButton = this.add.text(495, 330, '鯉の池', {fill: 'white'});
         pondButton.setInteractive();
-        pondButton.on('pointerdown', () => {this.interactMessage('これは鯉の池です。')});
+        pondButton.on('pointerdown', () => {this.interactMessage('ゼロっぴき鯉がいます。')});
     }
     interactMessage(text){
         this.description.text = text;
