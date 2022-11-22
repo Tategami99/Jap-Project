@@ -1,50 +1,43 @@
-class SceneMain extends Phaser.Scene{
-    constructor() {
-        super('SceneMain');
+class SceneInterior extends Phaser.Scene{
+    constructor(){
+        super('SceneInterior');
     }
-    preload()
-    {
-    	//loads images or sounds
+    preload(){
+        //player
         this.load.spritesheet('player', 'images/RedHairHighSchooler.png', {frameWidth: 32, frameHeight: 32});
 
         //tilesets
-        this.load.image('tiles1', 'images/tilesets/[A]Water1_pipo.png');
-        this.load.image('tiles2', 'images/tilesets/dbdeyft-e1ce0c00-12b2-48cd-92e4-771714a795d9-removebg-preview.png');
-        this.load.image('tiles3', 'images/tilesets/samplemap.png');
+        this.load.image('tiles5', 'images/tilesets/Interiors_free_32x32.png');
+        this.load.image('tiles6', 'images/tilesets/japaneseInterior.png');
+        this.load.image('tiles7', 'images/tilesets/kotatsu.png');
+        this.load.image('tiles8', 'images/tilesets/Room_Builder_free_32x32.png');
 
         //tilemap
-        this.load.tilemapTiledJSON('map', 'images/tilemaps/JapFinalHouse.json');
+        this.load.tilemapTiledJSON('map2', 'images/tilemaps/JapInterior1.json');
     }
-    create() {
-        //defines objects
-        console.log("Ready!");
-
+    create(){
         //important variables
-        const scaleRatio = 0.6;
+        const scaleRatio = 2;
         const gameWidth = this.game.config.width;
         const gameHeight = this.game.config.height;
         const tileScale = 1;
         const tileMapWidth = 640;
         const tileMapHeight = 416;
 
-        //grid
-        /*
-        const grid = new AlignGrid({scene: this, rows: 28, cols: 50});
-        grid.showNumbers();
-        */
-
         //tilemap and tilesets
-        const map = this.make.tilemap({key: 'map'});
-        const tileset1 = map.addTilesetImage('waterStuff', 'tiles1');
-        const tileset2 = map.addTilesetImage('japHouse1', 'tiles2');
-        const tileset3 = map.addTilesetImage('grassStuff', 'tiles3');
-        const grassLayer = map.createLayer('grass', tileset3, 0, 0).setScale(tileScale, tileScale);
-        const nonCollisionLayer = map.createLayer('nonCollisions', tileset2, 0, 0).setScale(tileScale, tileScale);
-        const collisionLayer = map.createLayer('Collisions', [tileset2, tileset1], 0, 0).setScale(tileScale, tileScale);
+        const map = this.make.tilemap({key: 'map2'});
+        const tileset1 = map.addTilesetImage('interior32', 'tiles5');
+        const tileset2 = map.addTilesetImage('japaneseInterior', 'tiles6');
+        const tileset3 = map.addTilesetImage('Kotatsu', 'tiles7');
+        const tileset4 = map.addTilesetImage('room32', 'tiles8');
+        const floorLayer = map.createLayer('Floor', [tileset2, tileset4], 0, 0);
+        const wallsLayer = map.createLayer('Walls', tileset4, 0, 0);
+        const borderLayer = map.createLayer('Border', tileset4, 0, 0);
+        const nonCollisionLayer = map.createLayer('NonCollisionDetails', [tileset1, tileset2], 0, 0);
+        const collisionLayer = map.createLayer('CollisionDetails', [tileset1, tileset2, tileset3], 0, 0);
+        wallsLayer.setCollisionByExclusion(-1, true);
+        borderLayer.setCollisionByExclusion(-1, true);
         collisionLayer.setCollisionByExclusion(-1, true);
-
-        //button stuff
-        this.createButtons();
 
         //player stuff
         this.player = this.physics.add.sprite(0.47 * gameWidth, 0.7 *gameHeight, 'player');
@@ -52,12 +45,11 @@ class SceneMain extends Phaser.Scene{
         this.createPlayer(this.player, gameWidth, gameHeight);
         this.physics.add.existing(this.player, true);
         this.player.body.allowGravity = false;
-        this.physics.add.collider(this.player, collisionLayer);
+        this.physics.add.collider(this.player, [wallsLayer, borderLayer, collisionLayer]);
         this.keyboard = this.input.keyboard.addKeys('W, A, S, D');
         this.direction = null;
     }
-    update(delta) {
-        //checks for collisions and updates values 
+    update(delta){
         this.updatePlayer(this.player);
     }
 
@@ -112,7 +104,7 @@ class SceneMain extends Phaser.Scene{
         });
     }
     updatePlayer(user){
-        const playerSpeed = 25
+        const playerSpeed = 70
         if(this.keyboard.S.isDown === true){
             user.setVelocityY(playerSpeed);
             this.direction = 'down';
@@ -150,31 +142,5 @@ class SceneMain extends Phaser.Scene{
                 user.play('idleUp', true);
             }
         }
-    }
-
-    createButtons(){
-        this.description = this.add.text(200, 390, 'N/A', {fill: 'black'});
-        this.description.setVisible(false);
-        const interiorButton = this.add.text(278, 230, 'Enter', {fill: '#0f0'});
-        interiorButton.setInteractive();
-        interiorButton.on('pointerdown', () => {this.scene.start('SceneInterior')});
-
-        const sakuraButton = this.add.text(25, 220, '桜', {fill: '#0f0'});
-        sakuraButton.setInteractive();
-        sakuraButton.on('pointerdown', () => {this.interactMessage('二本桜があります。')});
-
-        const pondButton = this.add.text(510, 330, '鯉', {fill: '#0f0'});
-        pondButton.setInteractive();
-        pondButton.on('pointerdown', () => {this.interactMessage('これは鯉の池です。')});
-    }
-    interactMessage(text){
-        this.description.text = text;
-        this.description.setVisible(true);
-        this.description.setInteractive();
-        this.description.on('pointerdown', () => {
-            this.description.setVisible(false);
-            this.description.text = 'N/A';
-            this.description.setInteractive(false);
-        })
     }
 }
