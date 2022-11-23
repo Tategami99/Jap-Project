@@ -39,6 +39,9 @@ class SceneInterior extends Phaser.Scene{
         borderLayer.setCollisionByExclusion(-1, true);
         collisionLayer.setCollisionByExclusion(-1, true);
 
+        //button stuff
+        this.createButtons();
+
         //player stuff
         this.player = this.physics.add.sprite(0.47 * gameWidth, 0.7 *gameHeight, 'player');
         this.player.setScale(scaleRatio, scaleRatio);
@@ -145,5 +148,39 @@ class SceneInterior extends Phaser.Scene{
                 user.play('idleUp', true);
             }
         }
+    }
+
+    createButtons(){
+        this.description = this.add.text(30, 390, 'N/A', {fill: 'black'});
+        this.description.setVisible(false);
+        const outsideButton = this.add.text(290, 380, '外（そと）', {fill: 'white'});
+        outsideButton.setInteractive();
+        outsideButton.on('pointerdown', () => {this.scene.start('SceneMain')});
+
+        const futonButton = this.add.text(35, 110, '布団（ふとん）', {fill: 'white'});
+        futonButton.setInteractive();
+        futonButton.on('pointerdown', () => {this.interactMessage('一枚（まい）布団があります。')});
+
+        const kotatsuButton = this.add.text(230, 130, '炬燵（こたつ）', {fill: 'white'});
+        kotatsuButton.setInteractive();
+        kotatsuButton.on('pointerdown', () => {this.interactMessage('一台（だい）炬燵があります。')});
+
+        const plantButton = this.add.text(400, 60, '植物（しょくぶつ）', {fill: 'white'});
+        plantButton.setInteractive();
+        plantButton.on('pointerdown', () => {this.interactMessage('二鉢（はち）植物があります。')});
+
+        const sittingfutonButton = this.add.text(480, 120, '座布団（ざぶとん）', {fill: 'white'});
+        sittingfutonButton.setInteractive();
+        sittingfutonButton.on('pointerdown', () => {this.interactMessage('四枚（まい）座布団があります。')});
+    }
+    interactMessage(text){
+        this.description.text = text;
+        this.description.setVisible(true);
+        this.description.setInteractive();
+        this.description.on('pointerdown', () => {
+            this.description.setVisible(false);
+            this.description.text = 'N/A';
+            this.description.setInteractive(false);
+        })
     }
 }

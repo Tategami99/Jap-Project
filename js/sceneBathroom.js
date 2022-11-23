@@ -38,6 +38,9 @@ class SceneBathroom extends Phaser.Scene{
         borderLayer.setCollisionByExclusion(-1, true);
         collisionLayer.setCollisionByExclusion(-1, true);
 
+        //button stuff
+        this.createButtons();
+
         //player stuff
         this.player = this.physics.add.sprite(0.2 * gameWidth, 0.68 *gameHeight, 'player');
         this.player.setScale(scaleRatio, scaleRatio);
@@ -146,4 +149,33 @@ class SceneBathroom extends Phaser.Scene{
         }
     }
 
+    createButtons(){
+        this.description = this.add.text(150, 390, 'N/A', {fill: 'black'});
+        this.description.setVisible(false);
+        const outsideButton = this.add.text(63, 390, '外（そと）', {fill: 'blue'});
+        outsideButton.setInteractive();
+        outsideButton.on('pointerdown', () => {this.scene.start('SceneMain')});
+
+        const mirrorButton = this.add.text(15, 40, '鏡（かがみ）', {fill: 'blue'});
+        mirrorButton.setInteractive();
+        mirrorButton.on('pointerdown', () => {this.interactMessage('一枚（まい）鏡があります。')});
+
+        const toiletButton = this.add.text(190, 130, '日本（にほん）のトイレ', {fill: 'blue'});
+        toiletButton.setInteractive();
+        toiletButton.on('pointerdown', () => {this.interactMessage('一つトイレがあります。')});
+
+        const ofuroButton = this.add.text(490, 60, 'お風呂（ふろ）', {fill: 'blue'});
+        ofuroButton.setInteractive();
+        ofuroButton.on('pointerdown', () => {this.interactMessage('一槽（そう）お風呂があります。')});
+    }
+    interactMessage(text){
+        this.description.text = text;
+        this.description.setVisible(true);
+        this.description.setInteractive();
+        this.description.on('pointerdown', () => {
+            this.description.setVisible(false);
+            this.description.text = 'N/A';
+            this.description.setInteractive(false);
+        })
+    }
 }

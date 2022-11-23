@@ -27,12 +27,6 @@ class SceneMain extends Phaser.Scene{
         const tileMapWidth = 640;
         const tileMapHeight = 416;
 
-        //grid
-        /*
-        const grid = new AlignGrid({scene: this, rows: 28, cols: 50});
-        grid.showNumbers();
-        */
-
         //tilemap and tilesets
         const map = this.make.tilemap({key: 'map'});
         const tileset1 = map.addTilesetImage('waterStuff', 'tiles1');
@@ -158,19 +152,19 @@ class SceneMain extends Phaser.Scene{
     createButtons(){
         this.description = this.add.text(200, 390, 'N/A', {fill: 'black'});
         this.description.setVisible(false);
-        const interiorButton = this.add.text(283, 230, '入口', {fill: 'white'});
+        const interiorButton = this.add.text(250, 230, '入口（いりぐち）', {fill: 'white'});
         interiorButton.setInteractive();
         interiorButton.on('pointerdown', () => {this.scene.start('SceneInterior')});
 
-        const bathroomButton = this.add.text(460, 210, 'お手洗い', {fill: 'white'});
+        const bathroomButton = this.add.text(430, 210, '浴室（よくしつ）', {fill: 'white'});
         bathroomButton.setInteractive();
         bathroomButton.on('pointerdown', () => {this.scene.start('SceneBathroom')});
 
-        const sakuraButton = this.add.text(25, 220, '桜', {fill: 'white'});
+        const sakuraButton = this.add.text(5, 220, '桜（さくら）', {fill: 'white'});
         sakuraButton.setInteractive();
-        sakuraButton.on('pointerdown', () => {this.interactMessage('二本桜があります。')});
+        sakuraButton.on('pointerdown', () => {this.interactMessage('二本（ぼん）桜があります。')});
 
-        const pondButton = this.add.text(495, 330, '鯉の池', {fill: 'white'});
+        const pondButton = this.add.text(440, 330, '鯉（こい）の池（いけ）', {fill: 'white'});
         pondButton.setInteractive();
         pondButton.on('pointerdown', () => {this.interactMessage('ゼロっぴき鯉がいます。')});
     }
